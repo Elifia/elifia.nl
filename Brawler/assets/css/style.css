@@ -1,0 +1,123 @@
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	padding: 50px;
+	text-align: center;
+	background: black;
+	color: white;
+}
+
+h1 {
+	font-family: Metal Mania;
+	font-weight: normal;
+	font-size: 50px;
+	/*text-shadow: 6px 6px 6px #666;*/
+}
+
+a {
+	text-decoration: none;
+	color: white;
+}
+
+a:hover {
+	color: #999;
+}
+
+.back {
+	padding: 20px;
+	text-align: left;
+}
+
+.back a {
+	font-family: Rock Salt;
+	font-size: 20px;
+	/*text-shadow: 6px 6px 6px #666;*/
+}
+
+#Game-container {
+	width: 1502px;
+	margin: auto;
+	border: 1px solid #999;
+	overflow: hidden;
+}
+
+#Game {
+	float: left;
+}
+
+#Players {
+	width: 300px;
+	height: 600px;
+	margin: auto;
+	float: right;
+	border-left: 1px solid #999;
+}
+
+#Players > div {
+	border-bottom: 1px solid #999;
+	padding: 25px;
+	height: 200px;
+}
+
+#Players > div:nth-child(3) {
+	border-bottom: none;
+}
+
+#Players > div/*.connectMessage*/ > div {
+	position: relative;
+	top: 50%;
+	-webkit-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+
+.playerinfo .choices {
+	margin-top: 10px;
+}
+
+.playerinfo .choice {
+	width: 75px;
+	display: inline-block;
+}
+
+.playerinfo .choice-0 {
+	color: #8bf;
+}
+
+.playerinfo .choice-1 {
+	color: #f55;
+}
+
+.playerinfo .choice-2 {
+	color: #b74;
+}
+
+.playerinfo .choice-3 {
+	color: #acf;
+}
+
+.playerinfo .status .health,
+.playerinfo .status .stamina {
+	width: 200px;
+	height: 25px;
+	margin: 5px auto 0;
+	border: 1px solid white;
+}
+
+.playerinfo .status .health {
+	margin-top: 15px;
+}
+
+.playerinfo .status .health > div {
+	background: #a00;
+	height: 100%;
+	margin: 0;
+}
+
+.playerinfo .status .stamina > div {
+	background: #6a0;
+	height: 100%;
+	margin: 0;
+}

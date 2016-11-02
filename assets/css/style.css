@@ -1,0 +1,62 @@
+@import url(https://fonts.googleapis.com/css?family=Metal+Mania|Rock+Salt);
+
+@font-face {
+    font-family: creepy;
+    src: url(../ttf/GhastlyPanic.ttf);
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	padding: 50px;
+	text-align: center;
+	background: black;
+	color: white;
+}
+
+h1 {
+	font-family: Rock Salt;
+	font-size: 50px;
+	/*text-shadow: 6px 6px 6px #666;*/	
+}
+
+.error {
+	position: relative;
+	top: calc(50% - 200px);
+}
+
+.error h1 {
+	font-family: creepy;
+	font-size: 150px;
+	line-height: 200px;
+	height: 200px;
+	font-weight: 400;
+	color: red;
+}
+
+a {
+	text-decoration: none;
+	color: white;
+}
+
+a:hover {
+	color: #999;
+}
+
+a.brawler {
+	font-family: Metal Mania;
+	font-size: 50px;
+	/*text-shadow: 6px 6px 6px #666;*/
+}
+
+.back {
+	padding: 20px;
+	text-align: left;
+}
+
+.back a {
+	font-family: Rock Salt;
+	font-size: 20px;
+}
