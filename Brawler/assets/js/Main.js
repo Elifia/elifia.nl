@@ -5,12 +5,19 @@ if( "getGamepads" in navigator )
 	var ctx;
 	var gameObjects = [];
 	var gamePads = [];
+	var controllers = [];
 	var players = [];
 	var types = ['Electricity', 'Fire', 'Earth', 'Ice'];
 	var flavour = ['electric','on fire','dirt','ice-cold'];
 	var choices = [];
-	var prev = [];
 	var framecount = 0;
+	var keys = [];
+	var mouse = [];
+
+	for(var i = 0; i < 100; i++)
+	{
+		keys[i] = 0;
+	}
 	
 	$(document).ready(function()
 	{
@@ -22,40 +29,46 @@ if( "getGamepads" in navigator )
 			framecount++;
 			gamePads = navigator.getGamepads();
 			
-			for(var i = 0; i < gamePads.length; i++)
+			for(var i = -1; i < controllers.length; i++)
 			{
-				if(gamePads[i])
+				if(controllers[i])
+				{
+					if( "update" in controllers[i] ) 
+					{
+						controllers[i].update();
+					}
+				}
+			}
+			
+			for(var i = -1; i < controllers.length; i++)
+			{
+				if(controllers[i])
 				{ 
 					if(players[i])
 					{
-						players[i].input.axes = gamePads[i].axes;
-						players[i].input.buttons = gamePads[i].buttons;
+						players[i].input = controllers[i];
 					}
 					else
 					{
-						if(gamePads[i].buttons[0].pressed && !prev[i].buttons[0].pressed)
+						if(controllers[i].buttons['jump'] > .5 && !controllers[i].prev['jump'] > .5)
 						{
 							players[i] = new Player(i, choices[i]);
 							gameObjects.push( players[i] );
 							$('.playerinfo.player-'+i+' .choices').hide();
-							$('.playerinfo.player-'+i+' .status').html('<span class="choice-'+choices[i]+'">Player '+i+' is '+flavour[choices[i]]+'!<span>');
+							$('.playerinfo.player-'+i+' .status').html('<span class="choice-'+choices[i]+'">Player '+ (i+1) +' is '+flavour[choices[i]]+'!<span>');
 							$('.playerinfo.player-'+i+' .status').append('<div class="health"><div style="width: 100%;"></div></div>');
 							$('.playerinfo.player-'+i+' .status').append('<div class="stamina"><div style="width: 100%;"></div></div>');
 						}
-						else if(gamePads[i].buttons[14].pressed && !prev[i].buttons[14].pressed)
+						else if(controllers[i].buttons['left'] > .5 && !controllers[i].prev['left'] > .5)
 						{
 							choices[i] = (choices[i] - 1 + 4) % 4;
 							$('.playerinfo.player-'+i+' .choice').attr('class','choice choice-'+choices[i]).text(types[choices[i]]);
 						}
-						else if(gamePads[i].buttons[15].pressed && !prev[i].buttons[15].pressed)
+						else if(controllers[i].buttons['right'] > .5 && !controllers[i].prev['right'] > .5)
 						{
 							choices[i] = (choices[i] + 1) % 4;
 							$('.playerinfo.player-'+i+' .choice').attr('class','choice choice-'+choices[i]).text(types[choices[i]]);
 						}
-					}
-					for(var j = 0; j < gamePads[i].buttons.length; j++)
-					{
-						prev[i].buttons[j] = {'pressed': gamePads[i].buttons[j].pressed};
 					}
 					
 				}
@@ -91,7 +104,7 @@ if( "getGamepads" in navigator )
 		
 		$(window).on('click', function()
 		{
-			//console.log(gamePads)
+			console.log(controllers);
 		});
 		
 		gameObjects.push( new Tile(300,350,200,50) );
@@ -99,6 +112,8 @@ if( "getGamepads" in navigator )
 	 
 		gamePads = navigator.getGamepads();
 		
+
+		addPlayer(-1);
 		for(var i = 0; i < gamePads.length; i++)
 		{
 			if(gamePads[i])
@@ -106,6 +121,28 @@ if( "getGamepads" in navigator )
 				addPlayer(i);
 			}
 		}
+
+		$(document).on("mousedown", function(e)
+		{
+			if(e.button === 2) e.preventDefault();
+			mouse[e.button] = 1;
+		});
+
+		$(document).on("mouseup", function(e)
+		{
+			mouse[e.button] = 0;
+		});
+
+		$(document).on("keydown", function(e)
+		{
+			if(e.keyCode < 100) e.preventDefault();
+			keys[e.keyCode] = 1;
+		});
+
+		$(document).on("keyup", function(e)
+		{
+			keys[e.keyCode] = 0;
+		});
 		
 		$(window).on("gamepadconnected", function(e) {
 			var i = e.originalEvent.gamepad.index;
@@ -121,11 +158,11 @@ if( "getGamepads" in navigator )
 	
 	function addPlayer(i)
 	{
-		choices[i] = i%4;
+		choices[i] = (i+4)%4;
 		$("#Players .connectMessage").before(
 			'<div class="playerinfo player-' + i + '">'+
 				'<div>'+
-					'<div class="status">Player ' + i + ' connected!</div>'+
+					'<div class="status">Player ' + (i+1) + ' connected!</div>'+
 					'<div class="choices">'+
 						'<div>Choose an element:</div>'+
 						'<div><- <span class="choice choice-'+choices[i]+'">'+types[choices[i]]+'</span> -></div>'+
@@ -133,11 +170,6 @@ if( "getGamepads" in navigator )
 				'</div>'+
 			'<div>'
 		);
-		prev[i] = {'buttons': []}; 
-		for(var j = 0; j < gamePads[i].buttons.length; j++)
-		{
-			prev[i].buttons[j] = {'pressed': gamePads[i].buttons[j].pressed};
-		}
 		
 		var elem = $('#Players').find('.playerinfo').sort(cmp);
 		$('#Players').prepend(elem);
@@ -146,6 +178,7 @@ if( "getGamepads" in navigator )
 			return a.className > b.className;
 		}
 		
+		controllers[i] = new Controller(i);
 		//players[i] = new Player(i, i);
 		//gameObjects.push( players[i] );
 	}
@@ -157,6 +190,10 @@ if( "getGamepads" in navigator )
 		{
 			gameObjects.splice( gameObjects.indexOf( players[i] ), 1 );
 			delete players[i];
+		}
+		if( controllers[i] )
+		{
+			delete controllers[i];
 		}
 	}
 	

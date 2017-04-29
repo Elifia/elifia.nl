@@ -43,11 +43,7 @@ var Player = function(i, type)
 		16: PS
 		17: touchpad
 	*/
-	this.input = {'axes': gamePads[this.id].axes, 'buttons': gamePads[this.id].buttons, 'prevButtons': []};
-	for(var i = 0; i < this.input.buttons.length; i++)
-	{
-		this.input.prevButtons[i] = {'pressed': this.input.buttons[i].pressed};
-	}
+	this.input = controllers[this.id];
 	
 	this.types = [
 		{
@@ -58,10 +54,10 @@ var Player = function(i, type)
 				'blink',
 				'none',
 				'fly',
-				'shield',
 				'bolt',
-				'none',
-				'EMP'
+				'EMP',
+				'shield',
+				'none'
 			]
 		},
 		{
@@ -72,10 +68,10 @@ var Player = function(i, type)
 				'roll',
 				'none',
 				'jet',
-				'shield',
 				'fireball',
-				'none',
-				'eruption'
+				'eruption',
+				'shield',
+				'none'
 			]
 		},
 		{
@@ -86,10 +82,10 @@ var Player = function(i, type)
 				'dash',
 				'none',
 				'hop',
-				'shield',
 				'sandslash',
-				'none',
-				'tremor'
+				'tremor',
+				'shield',
+				'none'
 			]
 		},
 		{
@@ -100,10 +96,10 @@ var Player = function(i, type)
 				'roll',
 				'none',
 				'flylong',
-				'shield',
 				'laser',
-				'none',
-				'frostmissile'
+				'frostmissile',
+				'shield',
+				'none'
 			]
 		}
 	]
@@ -186,15 +182,15 @@ Player.prototype.update = function()
 	}
 	if(!this.actionsDisabled && this.stamina > 0)
 	{
-		for(var i = 0; i <= 7; i++)
+		for(var i = 4; i <= 11; i++)
 		{
-			if( this.input.buttons[i].pressed && !this.input.prevButtons[i].pressed )
+			if( this.input.buttons[Object.keys(this.input.buttons)[i]] > .5 && !this.input.prev[Object.keys(this.input.buttons)[i]] > .5 )
 			{
-				if( this.type.moves[i] in this )
+				if( this.type.moves[i-4] in this )
 				{
-					this[this.type.moves[i]]();
+					this[this.type.moves[i-4]]();
 				}
-				else console.log(this.type.moves[i]);
+				else console.log(this.type.moves[i-4]);
 			}
 		}
 	}
@@ -203,11 +199,6 @@ Player.prototype.update = function()
 	this.pos.y += this.velocity.y;
 	
 	this.onGround = false;
-	
-	for(var i = 0; i < this.input.buttons.length; i++)
-	{
-		this.input.prevButtons[i] = {'pressed': this.input.buttons[i].pressed};
-	}
 	
 	for(var i = 0; i < this.particles.length; i++)
 	{
