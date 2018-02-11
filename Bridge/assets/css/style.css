@@ -1,0 +1,44 @@
+body {
+	padding: 50px;
+	text-align: center;
+	background: black;
+	color: #ccc;
+}
+
+#calculator table {
+	margin: 0 auto 30px;
+	text-align: center;
+}
+
+#calculator label {
+	display: inline-block;
+	width: 60px;
+}
+
+#calculator input[type=number] {
+	text-align: center;
+	padding: 5px 10px;
+	border-radius: 5px;
+	width: 100px;
+}
+
+#calculator span.mp {
+	display: inline-block;
+	width: 100px;
+}
+
+#calculator button {
+	padding: 5px 10px;
+	border-radius: 5px;
+	border: none;
+	font-size: 20px;
+	background: #ccc;
+}
+
+#calculator button:hover {
+	background: #aaa;
+}
+
+#calculator button:active {
+	background: #666;
+}
